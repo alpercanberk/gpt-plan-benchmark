@@ -1,0 +1,697 @@
+
+ Instance ./instances/generated_basic_easy/instance-1.pddl
+
+ Instance ./instances/generated_basic_easy/instance-2.pddl
+
+ Instance ./instances/generated_basic_easy/instance-3.pddl
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on top of the yellow block and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the blue block
+put down the red block
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on top of the yellow block and the yellow block is on the table.
+My goal is to have that the red block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the blue block
+put down the red block
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the red block
+stack the red block on top of the yellow block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+pick up the red block
+stack the red block on top of the blue block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(pick-up red)
+(stack red blue)
+(pick-up blue)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack red yellow)
+(put-down red)
+(unstack yellow blue)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-2.pddl
+
+ Instance ./instances/generated_basic_easy/instance-3.pddl
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on top of the yellow block and the yellow block is on the table.
+My goal is to have that the red block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the blue block
+put down the red block
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the red block
+stack the red block on top of the yellow block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the yellow block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+stack the yellow block on top of the red block
+stack the blue block on top of the yellow block
+pick up the blue block
+put down the blue block
+pick up the yellow block
+stack the yellow block on top of the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(stack yellow red)
+(stack blue yellow)
+(pick-up blue)
+(put-down blue)
+(pick-up yellow)
+(stack yellow blue)
+
+-------- Ground truth plan ---------
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-3.pddl
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the yellow block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(pick-up blue)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack blue red)
+(put-down blue)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the yellow block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+stack the blue block on top of the red block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(stack blue red)
+(put-down blue)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up blue)
+(stack blue red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+
+ Instance ./instances/generated_basic_easy/instance-8.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+pick up the yellow block
+stack the yellow block on top of the blue block
+pick up the red block
+stack the red block on top of the yellow block
+put down the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(pick-up yellow)
+(stack yellow blue)
+(pick-up red)
+(stack red yellow)
+(put-down blue)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+
+ Instance ./instances/generated_basic_easy/instance-8.pddl
+
+ Instance ./instances/generated_basic_easy/instance-9.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the blue block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the red block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+(pick-up blue)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack yellow red)
+(put-down yellow)
+(pick-up blue)
+(stack blue red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+
+ Instance ./instances/generated_basic_easy/instance-8.pddl
+
+ Instance ./instances/generated_basic_easy/instance-9.pddl
+
+ Instance ./instances/generated_basic_easy/instance-10.pddl
+=================================== 1_reasoning FAILURE ===================================
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the blue block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the red block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+
+[STATEMENT]
+As initial conditions I have that, the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up blue)
+(stack blue yellow)
+
+=============================================================================

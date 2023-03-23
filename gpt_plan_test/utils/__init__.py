@@ -6,6 +6,9 @@ import hashlib
 from tarski.io import PDDLReader
 from tarski.syntax.formulas import *
 from transformers import StoppingCriteriaList, StoppingCriteria
+import requests
+import pdb
+import time
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 random.seed(10)
@@ -42,7 +45,7 @@ class Callbacks():
 
     def t1_gen_goal_directed_instances(self):
         n = self.data['n_instances'] + 2
-        n_objs = range(4, len(self.data["encoded_objects"]) + 1)
+        n_objs = range(3, len(self.data["encoded_objects"]) + 1)
         ORIG = os.getcwd()
         CMD = "./blocksworld 4 {}"
         start = self.add_existing_files_to_hash_set()
@@ -144,6 +147,25 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
             return resp_string
         else:
             assert model is not None
+    elif engine=='dryrun':
+        return "Dry run"
+    elif engine=='llama':
+        LLAMA_PORT = 54983
+        #query for response with exponential backoff
+        backoff = 0.5
+        try:
+            response = requests.post(f'http://localhost:{LLAMA_PORT}/flask-inference', json={'prompt': query})
+            if response.status_code != 200:
+                raise Exception('bad response code')
+        except Exception as e:
+            print(f'[-]: Error: {e}, retrying in {backoff} seconds')
+            time.sleep(backoff)
+            backoff *= 2
+
+        full_response_text = response.json()['result']
+        completion_text = full_response_text[len(query):]
+        return completion_text
+
     else:
         try:
             response = openai.Completion.create(

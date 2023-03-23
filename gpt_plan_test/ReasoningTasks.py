@@ -38,7 +38,7 @@ class ReasoningTasks():
     def __init__(self, engine, verbose=False):
         self.engine = engine
         self.verbose = verbose
-        self.n_examples = 1
+        self.n_examples = 3
         self.max_gpt_response_length = 500
 
         self.plan_file = "sas_plan"
@@ -536,7 +536,7 @@ if __name__ == '__main__':
     verbose = eval(args.verbose)
     tasks_obj = ReasoningTasks(engine, verbose)
     if task == 't1':
-        config_file = './configs/t1_goal_directed_reasoning.yaml'
+        config_file = './configs/t1_goal_directed_reasoning_easy.yaml'
         tasks_obj.t1_t4(config_file)
     elif task == 't2':
         config_file = './configs/t2_paraphrasing.yaml'
