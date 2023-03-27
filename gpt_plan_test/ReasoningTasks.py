@@ -8,7 +8,10 @@ from tarski.io import PDDLReader
 import argparse
 import time
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModel
-
+import tqdm
+from feasible_plan import evaluate_plan as evaluate_feasible_plan
+from conversions import text_plan_to_natural_language
+ 
 np.random.seed(42)
 
 success_template = "{} {} {} {}"
@@ -85,6 +88,134 @@ class ReasoningTasks():
         os.makedirs(f"outputs/{self.engine}/", exist_ok=True)
         with open(f"outputs/{self.engine}/" + output_file + ".txt", 'w+') as f:
             f.write(final_output)
+    
+     # ========================================== TASKS ========================================== #
+    def t1_ablations(self, config_file, t1_or_t4="1_reasoning"):
+        self.read_config(config_file)
+
+        # ---- Uncomment the below lines to generate problem instances ---- #
+        # for f_name in self.data['callbacks']:
+        #     callback_obj = Callbacks(self.data)
+        #     getattr(callback_obj, f_name)()
+        # ---- Uncomment the above lines to generate problem instances ---- #
+
+        domain_name = self.data['domain']
+        domain_pddl = f'./instances/{self.data["domain_file"]}'
+        instance_folder = f'./instances/{domain_name}/'
+        instance = f'./instances/{domain_name}/{self.data["instances_template"]}'
+        n_files = min(self.data['n_instances'], len(os.listdir(instance_folder)))
+
+        i_start = self.data['start']
+        i_end = self.data['end']
+        n_files = i_end - i_start + 1  # min(self.data['n_instances'], len(os.listdir(instance_folder)))
+        final_output = ""
+
+        correct_plans = 0
+        correct_feasibility = 0
+        correct_perplexity = 0
+
+        pbar = tqdm.tqdm(range(i_start, i_end + 2 - self.n_examples))
+        for start in pbar:
+
+            correct_success_percent = correct_plans / (start - i_start + 1)
+            correct_feasibility_percent = correct_feasibility / (start - i_start + 1)
+            correct_perplexity_percent = correct_perplexity / (start - i_start + 1)
+            pbar.set_description(f"n_examples={self.n_examples}, correct(%): {correct_success_percent:.2f}, "
+                                    f"correct_feasibility(%): {correct_feasibility_percent:.2f}, "
+                                    f"correct_perplexity(%): {correct_perplexity_percent:.2f}")
+
+            query = ""
+            for i in range(start, start + self.n_examples + 1):
+                last_plan = True if i == start + self.n_examples else False
+                get_plan = not last_plan
+                cur_instance = instance.format(i)
+                # --------------- Add to final output --------------- #
+                final_output += f"\n Instance {cur_instance}\n"
+                if self.verbose:
+                    print(f"Instance {cur_instance}")
+
+                # --------------- Read Instance --------------- #
+                problem = self.get_problem(cur_instance, domain_pddl)
+                # --------------------------------------------- #
+
+                # --------------- Read Instance to Python ---------------- #
+                parsed_init_conditions = []
+                with open(cur_instance, 'r') as file:
+                    lines = file.readlines()
+                    for i, line in enumerate(lines):
+                        if line.startswith('(:objects'):
+                            for j in range(i, len(lines)):
+                                if lines[j].startswith('(:goal'):
+                                    break
+                                
+                                #split by spaces
+                                chunked_line = lines[j].split(' ')
+                                #iterate over chunks
+                                #if the first element is a letter and the length of the string is at most 2, then it is an object
+                                for k, chunk in enumerate(chunked_line):
+                                    if chunk[0].isalpha() and (len(chunk) <= 1 or chunk[1] == ')'):
+                                        #replace the chunk with the corresponding object
+                                        chunked_line[k] = self.data['encoded_objects'][chunk[0]].split(' ')[0] + chunk[1:]
+                                #join the chunks back together
+                                lines[j] = ' '.join(chunked_line)
+                                parsed_init_conditions.append(lines[j])
+               
+                parsed_init_conditions = [line.strip() for line in parsed_init_conditions]
+                parsed_init_conditions = [line for line in parsed_init_conditions if line != '']
+                # --------------------------------------------- #
+
+                # ------------ Put plan and instance into text ------------ #
+                gt_plan = self.compute_plan(domain_pddl, cur_instance)
+                gt_plan_text = get_plan_as_text(self.data)
+
+                query += self.data["domain_intro"]
+                query += fill_template(*instance_to_text_blocksworld(problem, get_plan, self.data))
+                # --------------------------------------------------------- #
+
+            # Querying LLM
+            gpt3_response = send_query(query, self.engine, self.max_gpt_response_length, model=self.model)                
+            gt_response = text_plan_to_natural_language(gt_plan_text, self.data)
+
+            gpt3_perplexity_query = query + '\n' + gpt3_response
+            gt_perplexity_query = query + '\n' + gt_response
+
+            gpt3_response_perplexity = perplexity_query(gpt3_perplexity_query, self.engine, self.max_gpt_response_length, model=self.model)
+            gt_response_perplexity = perplexity_query(gt_perplexity_query, self.engine, self.max_gpt_response_length, model=self.model)
+
+            # Do text_to_plan procedure
+            plan_written, gpt3_plan = text_to_plan_blocksworld(gpt3_response, problem.actions, self.gpt3_plan_file, self.data)
+
+            # --------------- Validate feasibility GPT-3's actions ---------------- #
+            gpt3_parsed_plan = gpt3_plan.split('\n')
+            gpt3_parsed_plan = [x for x in gpt3_parsed_plan if x != '']
+            correct_f, feasibility_output = evaluate_feasible_plan(parsed_init_conditions, gpt3_parsed_plan)  #response in the form of a string
+            correct_feasibility += correct_f
+            # ------------------------------- #
+
+            # --------------- Validate correctness of GPT-3's actions ---------------- #
+            correct = int(validate_plan(domain_pddl, cur_instance, self.gpt3_plan_file))
+            correct_plans += correct
+            # ------------------------------- #
+
+            correct_perplexity += (gt_response_perplexity < gpt3_response_perplexity) or correct
+            
+
+            final_output += success_template.format('='*5, t1_or_t4, f"gt_perplexity{gt_response_perplexity:.3f}", f"gpt3_perplexity{gpt3_response_perplexity:.3f}",
+                            "SUCCESS" if correct else "FAILURE", f", FEASIBILITY:[{feasibility_output}]", '='*15) if self.verbose else ""
+            final_output += verbose_template.format(query, gpt3_response, gpt3_plan, gt_plan_text, '='*77) if self.verbose else ""
+            if self.verbose: print(final_output)
+
+            self.save_output("task" + t1_or_t4, final_output)
+
+
+        os.remove(self.plan_file)
+        os.remove(self.gpt3_plan_file)
+
+        # --------------- Add to final output --------------- #
+        final_output += f"[+]: The number of correct plans is {correct_plans}/{n_files}={correct_plans / (n_files) * 100}%"
+        print(f"[+]: The number of correct plans is {correct_plans}/{n_files}={correct_plans / (n_files) * 100}%")
+        self.save_output("task" + t1_or_t4, final_output)
+
     # ========================================== TASKS ========================================== #
     def t1_t4(self, config_file, t1_or_t4="1_reasoning"):
         self.read_config(config_file)
@@ -106,7 +237,13 @@ class ReasoningTasks():
         n_files = i_end - i_start + 1  # min(self.data['n_instances'], len(os.listdir(instance_folder)))
         final_output = ""
         correct_plans = 0
-        for start in range(i_start, i_end + 2 - self.n_examples):
+
+        pbar = tqdm.tqdm(range(i_start, i_end + 2 - self.n_examples))
+        for start in pbar:
+
+            correct_percent = correct_plans / (start - i_start + 1)
+            pbar.set_description(f"n_examples={self.n_examples}, correct(%): {correct_percent: .2f}")
+
             query = self.data["domain_intro"]
             for i in range(start, start + self.n_examples + 1):
                 last_plan = True if i == start + self.n_examples else False
@@ -116,29 +253,67 @@ class ReasoningTasks():
                 final_output += f"\n Instance {cur_instance}\n"
                 if self.verbose:
                     print(f"Instance {cur_instance}")
+
                 # --------------- Read Instance --------------- #
                 problem = self.get_problem(cur_instance, domain_pddl)
                 # --------------------------------------------- #
+
+                # --------------- Read Instance to Python ---------------- #
+                parsed_init_conditions = []
+                with open(cur_instance, 'r') as file:
+                    lines = file.readlines()
+                    for i, line in enumerate(lines):
+                        if line.startswith('(:objects'):
+                            for j in range(i, len(lines)):
+                                if lines[j].startswith('(:goal'):
+                                    break
+                                
+                                #split by spaces
+                                chunked_line = lines[j].split(' ')
+                                #iterate over chunks
+                                #if the first element is a letter and the length of the string is at most 2, then it is an object
+                                for k, chunk in enumerate(chunked_line):
+                                    if chunk[0].isalpha() and (len(chunk) <= 1 or chunk[1] == ')'):
+                                        #replace the chunk with the corresponding object
+                                        chunked_line[k] = self.data['encoded_objects'][chunk[0]].split(' ')[0] + chunk[1:]
+                                #join the chunks back together
+                                lines[j] = ' '.join(chunked_line)
+                                parsed_init_conditions.append(lines[j])
+               
+                parsed_init_conditions = [line.strip() for line in parsed_init_conditions]
+                parsed_init_conditions = [line for line in parsed_init_conditions if line != '']
+                # --------------------------------------------- #
+
                 # ------------ Put plan and instance into text ------------ #
                 gt_plan = self.compute_plan(domain_pddl, cur_instance)
                 gt_plan_text = get_plan_as_text(self.data)
                 query += fill_template(*instance_to_text_blocksworld(problem, get_plan, self.data))
                 # --------------------------------------------------------- #
-
             # Querying LLM
             gpt3_response = send_query(query, self.engine, self.max_gpt_response_length, model=self.model)
 
             # Do text_to_plan procedure
-            _, gpt3_plan = text_to_plan_blocksworld(gpt3_response, problem.actions, self.gpt3_plan_file, self.data)
-            # Apply VAL
+            plan_written, gpt3_plan = text_to_plan_blocksworld(gpt3_response, problem.actions, self.gpt3_plan_file, self.data)
+
+            # --------------- Validate feasibility GPT-3's actions ---------------- #
+            gpt3_parsed_plan = gpt3_plan.split('\n')
+            gpt3_parsed_plan = [x for x in gpt3_parsed_plan if x != '']
+            feasibility_output = evaluate_feasible_plan(parsed_init_conditions, gpt3_parsed_plan)  #response in the form of a string
+            # ------------------------------- #
+
+            # --------------- Validate correctness of GPT-3's actions ---------------- #
             correct = int(validate_plan(domain_pddl, cur_instance, self.gpt3_plan_file))
             correct_plans += correct
+            # ------------------------------- #
+            
 
-            final_output += success_template.format('='*35, t1_or_t4, "SUCCESS" if correct else "FAILURE", '='*35)
+            final_output += success_template.format('='*15, t1_or_t4, \
+                            "SUCCESS" if correct else "FAILURE", f", FEASIBILITY:[{feasibility_output}]", '='*15) if self.verbose else ""
             final_output += verbose_template.format(query, gpt3_response, gpt3_plan, gt_plan_text, '='*77) if self.verbose else ""
             if self.verbose: print(final_output)
 
             self.save_output("task" + t1_or_t4, final_output)
+
 
         os.remove(self.plan_file)
         os.remove(self.gpt3_plan_file)
@@ -537,7 +712,8 @@ if __name__ == '__main__':
     tasks_obj = ReasoningTasks(engine, verbose)
     if task == 't1':
         config_file = './configs/t1_goal_directed_reasoning_easy.yaml'
-        tasks_obj.t1_t4(config_file)
+        # tasks_obj.t1_t4(config_file)
+        tasks_obj.t1_ablations(config_file)
     elif task == 't2':
         config_file = './configs/t2_paraphrasing.yaml'
         tasks_obj.t2_paraphrasing(config_file)
@@ -557,3 +733,4 @@ if __name__ == '__main__':
     elif task == 't7':
         config_file = './configs/t3_plan_subset.yaml'
         tasks_obj.t7_plan_execution(config_file)
+

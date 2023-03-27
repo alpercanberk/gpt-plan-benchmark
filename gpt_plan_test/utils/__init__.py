@@ -131,6 +131,22 @@ def generate_from_bloom(model, tokenizer, query, max_tokens):
     output_sequences = model.generate(input_ids=encoded_input['input_ids'].cuda(), max_new_tokens=max_tokens, temperature=0,top_p=1)
     return tokenizer.decode(output_sequences[0], skip_special_tokes=True)
 
+
+def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
+    assert engine == 'llama'
+    LLAMA_PORT = 54983
+    #query for response with exponential backoff
+    backoff = 0.5
+    # try:
+    response = requests.post(f'http://localhost:{LLAMA_PORT}/flask-inference', json={'prompt': query, 'prob_mode':True})
+    response = response.json()
+    return response['info']['log_perplexity']
+    # except:
+    #     print("LLAMA ERROR, RETRYING IN 0.5s")
+    #     time.sleep(backoff)
+    #     backoff *= 2
+    #     return perplexity_query(query, engine, max_tokens, model, stop)
+
 def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
     max_token_err_flag = False
     if engine=='bloom':
@@ -256,7 +272,7 @@ def fill_template(INIT, GOAL, PLAN):
     text = ""
     if INIT != "":
         text += "\n[STATEMENT]\n"
-        text += f"As initial conditions I have that, {INIT.strip()}."
+        text += f"As initial conditions {INIT.strip()}."
     if GOAL != "":
         text += f"\nMy goal is to have that {GOAL}."
     text += f"\n\nMy plan is as follows:\n\n[PLAN]{PLAN}"
@@ -379,7 +395,7 @@ def text_to_plan_blocksworld(text, action_set, plan_file, data, ground_flag=Fals
         plan += f"{action}\n"
         readable_plan += f"{readable_action}\n"
 
-    print(f"[+]: Saving plan in {plan_file}")
+    # print(f"[+]: Saving plan in {plan_file}")
     file = open(plan_file, "wt")
     file.write(plan)
     file.close()
@@ -497,14 +513,14 @@ def generate_plan_subset(planexecutor, data, give_response):
     resulting_state = planexecutor.final_state
     if give_response:
         INIT, PLAN, GOAL = parsed_instance_to_text_blocksworld(initial_state, planexecutor.plan, goal_state, data)
-        text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n[PLAN]{PLAN} "
+        text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n[PLAN]{PLAN} "
         return text, PLAN
     else:
         INIT, _, GOAL = parsed_instance_to_text_blocksworld(initial_state,
                                                                       planexecutor.plan[:planexecutor.prefix],
                                                                       resulting_state, data)
         PLAN_PREFIX = planexecutor.plan[:planexecutor.prefix]
-        text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n[PLAN]"
+        text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n[PLAN]"
         return text, PLAN_PREFIX
 
 
@@ -532,9 +548,9 @@ def optimality(planexecutor, data, give_response=True):
     else:
         COST += ".\n"
     if give_response:
-        text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}.\nMy goal is to have that {GOAL}. I want to minimize the time taken to achieve my goal.\nMy plan is as follows:\n\n[PLAN]{PLAN}{COST}"
+        text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}.\nMy goal is to have that {GOAL}. I want to minimize the time taken to achieve my goal.\nMy plan is as follows:\n\n[PLAN]{PLAN}{COST}"
     else:
-        text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}.\nMy goal is to have that {GOAL}. I want to minimize the time taken to achieve my goal.\nMy plan is as follows:\n\n[PLAN] "
+        text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}.\nMy goal is to have that {GOAL}. I want to minimize the time taken to achieve my goal.\nMy plan is as follows:\n\n[PLAN] "
     return text, PLAN + COST
 
 
@@ -561,7 +577,7 @@ def replanning(planexecutor, data, give_response, is_harder=random.choice(([0, 1
     else:
         execution_text = f"During execution, an unexpected event has occurred.\nAfter executing the action \"{get_action_text(final_action, data)}\" at step {planexecutor.prefix} in the plan, the following facts unexpectedly became true: {get_facts_text(to_add_or_remove['to_add'],data)}\nThe following facts became unexpectedly false: {get_facts_text(to_add_or_remove['to_remove'],data)}"
     INIT, PLAN, GOAL = parsed_instance_to_text_blocksworld(initial_state, planexecutor.plan, goal_state, data)
-    text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n[PLAN]{PLAN}\n"
+    text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n[PLAN]{PLAN}\n"
     text += execution_text
     INIT, PLAN, GOAL = parsed_instance_to_text_blocksworld(replanning_state, plan, goal_state, data)
     if give_response:
@@ -595,9 +611,9 @@ def plan_execution(planexecutor, data, give_response):
 
     INIT, PLAN, GOAL = parsed_instance_to_text_blocksworld(initial_state, plan_prefix, [], data, action_seq=True)
     if give_response:
-        text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}\n I have executed the following action sequence:\n\n[ACTION SEQUENCE]{PLAN}{FIN}{answer}"
+        text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}\n I have executed the following action sequence:\n\n[ACTION SEQUENCE]{PLAN}{FIN}{answer}"
     else:
-        text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}\n I have executed the following action sequence:\n\n[ACTION SEQUENCE]{PLAN}{FIN}"
+        text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}\n I have executed the following action sequence:\n\n[ACTION SEQUENCE]{PLAN}{FIN}"
 
     # Get a random object
     # Create the corresponding question
@@ -668,7 +684,7 @@ def generate_plan_subset_cot(planexecutor, data, give_response):
 
             plan_text += "I " + DATA['actions'][pred[0]].format(*objs)
             plan_text += "\n"
-            plan_text += "I have that, " + get_state_translation(state, DATA) + "."
+            plan_text += "" + get_state_translation(state, DATA) + "."
             plan_text += "\n"
 
         plan_text += "My goal is present in the current state.\n"
@@ -700,5 +716,5 @@ def generate_plan_subset_cot(planexecutor, data, give_response):
     else:
         GOAL += goal_text[0]
 
-    text = f"\n[STATEMENT]\nAs initial conditions I have that, {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n{PLAN}"
+    text = f"\n[STATEMENT]\nAs initial conditions {INIT.strip()}\nMy goal is to have that {GOAL}.\nMy plan is as follows:\n\n{PLAN}"
     return text, plan_text
