@@ -20,7 +20,6 @@ def evaluate_plan(initial_conditions_list, plan):
     state = set(initial_conditions)
 
     for action in plan:
-        action = action.replace("(", "").replace(")", "")
         action_parts = action.split()
         action_name = action_parts[0]
         action_obj1 = action_parts[1]
@@ -100,27 +99,27 @@ def evaluate_plan(initial_conditions_list, plan):
     return True, "All actions are valid."
 
 if __name__ == "__main__":
-    # initial_conditions_list = [
-    # "(:objects a b c)",
-    # "(:init",
-    # "(handempty)",
-    # "(ontable a)",
-    # "(on b a)",
-    # "(on c b)",
-    # "(clear c)"
-    # ]
+    initial_conditions_list = [
+    "(:objects a b c)",
+    "(:init",
+    "(handempty)",
+    "(ontable a)",
+    "(on b a)",
+    "(on c b)",
+    "(clear c)"
+    ]
 
-    # plan = [
-    # "(unstack c b)",
-    # "(put-down c)",
-    # "(pick-up a)",
-    # "(stack a b)",
-    # "(pick-up c)",
-    # "(stack c a)"
-    # ]
+    plan = [
+    "(unstack c b)",
+    "(put-down c)",
+    "(pick-up a)",
+    "(stack a b)",
+    "(pick-up c)",
+    "(stack c a)"
+    ]
 
-    # result = evaluate_plan(initial_conditions_list, plan)
-    # print(result)
+    result = evaluate_plan(initial_conditions_list, plan)
+    print(result)
 
     initial_conditions1 = [
         "(:objects a b c)",

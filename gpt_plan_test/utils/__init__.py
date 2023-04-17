@@ -10,8 +10,13 @@ import requests
 import pdb
 import time
 
+from plan_utils.plan_augmentations import *
+from feasible_plan import *
+from plan_utils.conversions import text_plan_to_natural_language
+
 openai.api_key = os.environ["OPENAI_API_KEY"]
 random.seed(10)
+np.random.seed(42)
 
 
 class Callbacks():
@@ -131,21 +136,147 @@ def generate_from_bloom(model, tokenizer, query, max_tokens):
     output_sequences = model.generate(input_ids=encoded_input['input_ids'].cuda(), max_new_tokens=max_tokens, temperature=0,top_p=1)
     return tokenizer.decode(output_sequences[0], skip_special_tokes=True)
 
+def extract_plan_perplexity(sequence_log_probs, sequence_tokens, plan_start_str='[PLAN]'):
+    #while plan appears in the string, add the last index of the list to the string
+    #return the list of indices
+    for i in range(len(sequence_tokens), 0, -1):
+        if plan_start_str in "".join(sequence_tokens[i:]):
+            break
+        
+    # print("here")
+    # plan_tokens = sequence_tokens[i:]
+    plan_sequence_log_probs = sequence_log_probs[i:]
 
-def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
+    # print(plan_tokens, plan_sequence_log_probs)
+    def f(seq_len):
+        return seq_len
+        # return np.sqrt(x)
+    
+    return sum(plan_sequence_log_probs) / (f(len(plan_sequence_log_probs)))
+
+def plan_list_to_natural_language(plan_list, data, len_plan=10):
+    plan_str = "\n".join(plan_list) + "\n"
+    
+    return text_plan_to_natural_language(plan_str, data)
+
+def gibbs_query(query, engine, max_tok, model=None, stop="[STATEMENT]", 
+                initial_conditions=None,
+                data=None, 
+                actions=None, 
+                plan_file=None,
+                ground_truth_plan=None):
+    #do a send query
+    initial_conditions, objects = parse_initial_conditions(initial_conditions)
+
+    initial_gpt3_response, tokens = send_query(query, engine, max_tok, model, stop)
+    for plan_start_idx in range(len(tokens), 0, -1):
+        if "[PLAN]" in "".join(tokens[plan_start_idx:]):
+            break
+
+    initial_plan_string, initial_plan_string_with_objects = text_to_plan_blocksworld(initial_gpt3_response, actions, plan_file, data)
+
+    initial_plan_list_with_objects = initial_plan_string_with_objects.split("\n")
+    initial_plan_list_with_objects = initial_plan_list_with_objects[:-1] #remove empty string at the end, don't forget to add \n at the end
+
+    plan_length = len(initial_plan_list_with_objects)
+
+    len_plan = 10
+    if plan_length < len_plan:
+        initial_plan_list_with_objects += ["(noop)"] * (len_plan - plan_length)
+    
+    # plan_list_perplexity = lambda plan_list: perplexity_query(query + plan_list_to_natural_language(plan_list, data), engine, max_tok, model, stop, prev_pos=plan_start_idx)
+    def plan_list_perplexity(plan_list):
+        nlplan = plan_list_to_natural_language(plan_list, data)
+        qu = query + nlplan
+        pdb.set_trace()
+        return perplexity_query(qu, engine, max_tok, model, stop, prev_pos=plan_start_idx)
+    
+    all_random_actions = []
+    print("getting all actions")
+    while len(all_random_actions) < 19:
+        random_action = get_random_action(objects=objects)
+        if random_action not in all_random_actions:
+            all_random_actions.append(random_action)
+
+    #sort alphabetically
+    all_random_actions.sort()
+    print("all actions", all_random_actions)
+
+    current_plan_list = initial_plan_list_with_objects
+    initial_plan_perplexity = plan_list_perplexity(current_plan_list)
+
+    ground_truth_plan_list = ground_truth_plan.split("\n")[:-1]
+    ground_truth_plan_perplexity = plan_list_perplexity(ground_truth_plan_list)
+
+    for i in range(len(initial_plan_list_with_objects)):
+        current_plan_perplexity = plan_list_perplexity(current_plan_list)
+
+        best_plan_list = current_plan_list.copy()
+        best_perplexity = current_plan_perplexity
+        
+        print("==== Statement ====")
+        print(query[-500:])
+        print("==== Current plan ====")
+        print("\n".join(current_plan_list))
+        print("==== Ground truth ====")
+        print(ground_truth_plan)
+        print(f"Current plan perplexity for {i}: ", current_plan_perplexity)
+
+        for sample_idx, random_action in enumerate(all_random_actions):
+            aug = 'replace'
+            alternative_list = current_plan_list.copy()
+
+            if aug == 'replace':
+                alternative_list[i] = random_action
+
+            alternative_perplexity = plan_list_perplexity(alternative_list)
+            print(f"\t {aug}: ", current_plan_list[i], ("with: "+random_action) if aug != 'remove' else "")
+            print(f"\t\t Alternative plan perplexity for {sample_idx}: ", alternative_perplexity)
+
+            if alternative_perplexity < best_perplexity:
+                print(f"Better action for {i}!")
+                best_perplexity = alternative_perplexity
+                best_plan_list = alternative_list.copy()
+        
+        current_plan_list = best_plan_list.copy()
+
+        print( "==========")
+        print(f"Originally generated plan with perplexity: {initial_plan_perplexity}")
+        print("\n".join(initial_plan_list_with_objects))
+        print("New best plan with perplexity: ", best_perplexity)
+        print("\n".join(best_plan_list))
+        print("==========")
+
+    pdb.set_trace()
+    ## DO SOME STUFF
+
+
+    
+
+
+def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]", prev_pos=0):
     assert engine == 'llama'
     LLAMA_PORT = 54983
     #query for response with exponential backoff
-    backoff = 0.5
-    # try:
-    response = requests.post(f'http://localhost:{LLAMA_PORT}/flask-inference', json={'prompt': query, 'prob_mode':True})
-    response = response.json()
-    return response['info']['log_perplexity']
-    # except:
-    #     print("LLAMA ERROR, RETRYING IN 0.5s")
-    #     time.sleep(backoff)
-    #     backoff *= 2
-    #     return perplexity_query(query, engine, max_tokens, model, stop)
+    backoff = 1
+
+    # UNCOMMENT IF YOU WANT TO SEE THE PLAN QUERY
+    # if '[PLAN]' in query:
+    #     last_plan_idx = query.rfind('[PLAN]')
+    #     plan_query = query[last_plan_idx:]
+    #     print("="*20)
+    #     print("PLAN QUERY: ", plan_query)
+    #     print("="*20)
+
+    try:
+        response = requests.post(f'http://127.0.0.1:{LLAMA_PORT}/flask-inference', json={'prompt': query, 'prob_mode':True, 'prob_prev_pos':prev_pos})
+        response = response.json()
+        return extract_plan_perplexity(response['info']['log_perplexity'], response['info']['tokens'])
+    except Exception as e:
+        print("LLAMA ERROR, RETRYING IN 0.5s", e)
+        time.sleep(backoff)
+        backoff *= 2
+        return perplexity_query(query, engine, max_tokens, model, stop, prev_pos)
 
 def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
     max_token_err_flag = False
@@ -160,7 +291,7 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
                     break
                 else:
                     resp_string+=f'{line}\n'
-            return resp_string
+            return resp_string, []
         else:
             assert model is not None
     elif engine=='dryrun':
@@ -170,7 +301,7 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
         #query for response with exponential backoff
         backoff = 0.5
         try:
-            response = requests.post(f'http://localhost:{LLAMA_PORT}/flask-inference', json={'prompt': query})
+            response = requests.post(f'http://127.0.0.1:{LLAMA_PORT}/flask-inference', json={'prompt': query})
             if response.status_code != 200:
                 raise Exception('bad response code')
         except Exception as e:
@@ -179,8 +310,9 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
             backoff *= 2
 
         full_response_text = response.json()['result']
+        tokens = response.json()['info']['tokens']
         completion_text = full_response_text[len(query):]
-        return completion_text
+        return completion_text, tokens
 
     else:
         try:
@@ -198,7 +330,7 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
             print("[-]: Failed GPT3 query execution: {}".format(e))
 
         text_response = response["choices"][0]["text"] if not max_token_err_flag else ""
-        return text_response.strip()
+        return text_response.strip(), []
 
 
 def treat_on(letters_dict, atom):
@@ -282,7 +414,7 @@ def fill_template(INIT, GOAL, PLAN):
     return text
 
 
-def instance_to_text_blocksworld(problem, get_plan, data, shuffle=False):
+def instance_to_text_blocksworld(problem, get_plan, data, shuffle=False, len_plan=8, negative_example=False):
     """
     Function to make a blocksworld instance into human-readable format
     :param get_plan: Flag to return the plan as text as well
@@ -301,26 +433,45 @@ def instance_to_text_blocksworld(problem, get_plan, data, shuffle=False):
         with open(plan_file) as f:
             plan = [line.rstrip() for line in f][:-1]
 
-        for action in plan:
+        if negative_example:
+            random_plan_idx = random.randint(0, len(plan)-1)
+            #remove random action
+            plan = plan[:random_plan_idx] + plan[random_plan_idx+1:]
+        
+        plan_length = len(plan)
+        if plan_length < len_plan:
+            plan = plan + ["(noop)"] * (len_plan - plan_length)
+
+        for idx, action in enumerate(plan):
             action = action.strip("(").strip(")")
             act_name, objs = action.split(" ")[0], action.split(" ")[1:]
             objs = [OBJS[obj] for obj in objs]
-            PLAN += data['actions'][act_name].format(*objs) + "\n"
-        PLAN += "[PLAN END]\n"
+            PLAN += f"{idx+1} " + data['actions'][act_name].format(*objs) + "\n"
+        
+        if not negative_example:
+            PLAN += "[PLAN END]\n"
+        else:
+            PLAN += "[PLAN END]\n"
 
     return INIT, GOAL, PLAN
 
 
-def get_plan_as_text(data, given_plan=None):
+def get_plan_as_text(data, given_plan=None, len_plan=8):
     OBJS = data['encoded_objects']
     PLAN = ""
     # print(given_plan)
     if given_plan:
         for action in given_plan:
-            act_name, objs = action.split("_")[0], action.split("_")[1:]
+            action = action.strip("(").strip(")")
+            act_name, objs = action.split(" ")[0], action.split(" ")[1:]
             objs = [OBJS[obj].replace(" block", "") for obj in objs]
             PLAN += "(" + act_name + " " + " ".join(objs) + ")\n"
             # PLAN += data['actions'][act_name].format(*objs) + "\n"
+        plan_length = len([x for x in PLAN.split("\n") if x != ""])
+
+        if plan_length < len_plan:
+            PLAN += f"(noop)\n" * (len_plan - plan_length)
+        
         return PLAN
 
     plan_file = "sas_plan"
@@ -334,6 +485,12 @@ def get_plan_as_text(data, given_plan=None):
         objs = [OBJS[obj].replace(" block", "") for obj in objs]
         PLAN += "(" + act_name + " " + " ".join(objs) + ")\n"
         # PLAN += data['actions'][act_name].format(*objs) + "\n"
+
+    plan_length = len([x for x in PLAN.split("\n") if x != ""])
+
+    if plan_length < len_plan:
+        PLAN += f"(noop)\n" * (len_plan - plan_length)
+    
     return PLAN
 
 

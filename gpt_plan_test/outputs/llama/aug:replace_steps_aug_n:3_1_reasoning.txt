@@ -1,0 +1,2148 @@
+
+ Instance ./instances/generated_basic_easy/instance-1.pddl
+
+ Instance ./instances/generated_basic_easy/instance-2.pddl
+
+ Instance ./instances/generated_basic_easy/instance-3.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -13.576528502673638
+Augmented Ground Truth Perplexity: -12.819499425327077
+Correct Perplexity: True
+Feasibility: Invalid action: stack red yellow because object red is not in hand,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 0.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on top of the yellow block and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the blue block
+put down the red block
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on top of the yellow block and the yellow block is on the table.
+My goal is to have that the red block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the blue block
+put down the red block
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the red block
+stack the red block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+stack the red block on top of the yellow block
+put down the yellow block
+unstack the blue block from on top of the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(stack red yellow)
+(put-down yellow)
+(unstack blue red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+(pick-up blue)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack yellow red)
+(put-down yellow)
+(unstack red blue)
+(put-down red)
+(pick-up yellow)
+(stack yellow red)
+(pick-up blue)
+(stack blue yellow)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-2.pddl
+
+ Instance ./instances/generated_basic_easy/instance-3.pddl
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.921203151116003
+Augmented Ground Truth Perplexity: -13.226365191095015
+Correct Perplexity: True
+Feasibility: Invalid action: stack yellow red because object yellow is not in hand,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on top of the yellow block and the yellow block is on the table.
+My goal is to have that the red block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the blue block
+put down the red block
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the red block
+stack the red block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+stack the yellow block on top of the red block
+put down the red block
+unstack the yellow block from on top of the red block
+stack the red block on top of the blue block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(stack yellow red)
+(put-down red)
+(unstack yellow red)
+(stack red blue)
+(pick-up red)
+(stack red blue)
+
+-------- Ground truth plan ---------
+(unstack red yellow)
+(put-down red)
+(unstack yellow blue)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-3.pddl
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.25011611867834
+Augmented Ground Truth Perplexity: -13.391216979307288
+Correct Perplexity: True
+Feasibility: Invalid action: stack yellow red because object yellow is not in hand,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the yellow block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+stack the yellow block on top of the red block
+unstack the yellow block from on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(stack yellow red)
+(unstack yellow red)
+
+-------- Ground truth plan ---------
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-4.pddl
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -13.424033467731778
+Augmented Ground Truth Perplexity: -13.248020717075892
+Correct Perplexity: True
+Feasibility: Invalid action: pick-up blue because hand is not empty, object blue is not on the table, object blue is not clear,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the yellow block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the blue block from on top of the red block
+pick up the blue block
+pick up the red block
+stack the yellow block on top of the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack blue red)
+(pick-up blue)
+(pick-up red)
+(stack yellow red)
+(pick-up yellow)
+(stack yellow red)
+
+-------- Ground truth plan ---------
+(unstack blue red)
+(put-down blue)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-5.pddl
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.329982892326687
+Augmented Ground Truth Perplexity: -14.137353109276813
+Correct Perplexity: True
+Feasibility: Invalid action: unstack red blue because object red is not on top of blue,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the red block from on top of the blue block
+put down the red block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack red blue)
+(put-down red)
+(pick-up blue)
+(stack blue red)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up blue)
+(stack blue red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-6.pddl
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+
+ Instance ./instances/generated_basic_easy/instance-8.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.507569063277472
+Augmented Ground Truth Perplexity: -13.581400644211541
+Correct Perplexity: True
+Feasibility: Invalid action: unstack red yellow because object red is not on top of yellow,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the red block from on top of the yellow block
+pick up the red block
+pick up the red block
+stack the red block on top of the blue block
+pick up the blue block
+stack the yellow block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack red yellow)
+(pick-up red)
+(pick-up red)
+(stack red blue)
+(pick-up blue)
+(stack yellow red)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-7.pddl
+
+ Instance ./instances/generated_basic_easy/instance-8.pddl
+
+ Instance ./instances/generated_basic_easy/instance-9.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.551149814025216
+Augmented Ground Truth Perplexity: -14.33256336537803
+Correct Perplexity: True
+Feasibility: Invalid action: pick-up yellow because hand is not empty,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the red block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the yellow block from on top of the red block
+put down the yellow block
+pick up the blue block
+pick up the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack yellow red)
+(put-down yellow)
+(pick-up blue)
+(pick-up yellow)
+
+-------- Ground truth plan ---------
+(unstack yellow red)
+(put-down yellow)
+(pick-up blue)
+(stack blue red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-8.pddl
+
+ Instance ./instances/generated_basic_easy/instance-9.pddl
+
+ Instance ./instances/generated_basic_easy/instance-10.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.996582103812177
+Augmented Ground Truth Perplexity: -14.57606719887775
+Correct Perplexity: True
+Feasibility: Invalid action: stack blue yellow because object blue is not in hand, object yellow is not clear,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the red block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the yellow block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up yellow)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(pick-up blue)
+(stack blue yellow)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-9.pddl
+
+ Instance ./instances/generated_basic_easy/instance-10.pddl
+
+ Instance ./instances/generated_basic_easy/instance-11.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -13.522606213887533
+Augmented Ground Truth Perplexity: -13.186452048165458
+Correct Perplexity: True
+Feasibility: Invalid action: stack red yellow because object red is not in hand,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the red block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the hand is empty, the blue block is on top of the yellow block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the blue block from on top of the yellow block
+put down the blue block
+stack the red block on top of the yellow block
+stack the blue block on top of the yellow block
+pick up the yellow block
+pick up the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack blue yellow)
+(put-down blue)
+(stack red yellow)
+(stack blue yellow)
+(pick-up yellow)
+(pick-up blue)
+
+-------- Ground truth plan ---------
+(unstack blue yellow)
+(put-down blue)
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-10.pddl
+
+ Instance ./instances/generated_basic_easy/instance-11.pddl
+
+ Instance ./instances/generated_basic_easy/instance-12.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -13.540880592052753
+Augmented Ground Truth Perplexity: -13.031148569924492
+Correct Perplexity: True
+Feasibility: Invalid action: pick-up blue because hand is not empty,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the yellow block is on top of the blue block, the red block is on the table and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the hand is empty, the blue block is on top of the yellow block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the hand is empty, the blue block is on top of the yellow block, the yellow block is on top of the red block and the red block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the blue block from on top of the yellow block
+put down the blue block
+unstack the yellow block from on top of the red block
+pick up the blue block
+stack the yellow block on top of the blue block
+stack the red block on top of the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack blue yellow)
+(put-down blue)
+(unstack yellow red)
+(pick-up blue)
+(stack yellow blue)
+(stack red blue)
+
+-------- Ground truth plan ---------
+(unstack blue yellow)
+(put-down blue)
+(unstack yellow red)
+(put-down yellow)
+(pick-up red)
+(stack red blue)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-11.pddl
+
+ Instance ./instances/generated_basic_easy/instance-12.pddl
+
+ Instance ./instances/generated_basic_easy/instance-13.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.35671341608441
+Augmented Ground Truth Perplexity: -13.422370751698812
+Correct Perplexity: True
+Feasibility: Invalid action: stack yellow blue because object yellow is not in hand,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the hand is empty, the blue block is on top of the yellow block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the yellow block
+put down the blue block
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the hand is empty, the blue block is on top of the yellow block, the yellow block is on top of the red block and the red block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the yellow block
+put down the blue block
+unstack the yellow block from on top of the red block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+stack the yellow block on top of the blue block
+unstack the yellow block from on top of the blue block
+pick up the yellow block
+put down the blue block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(stack yellow blue)
+(unstack yellow blue)
+(pick-up yellow)
+(put-down blue)
+(pick-up blue)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack blue red)
+(put-down blue)
+(pick-up yellow)
+(stack yellow red)
+(pick-up blue)
+(stack blue yellow)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-12.pddl
+
+ Instance ./instances/generated_basic_easy/instance-13.pddl
+
+ Instance ./instances/generated_basic_easy/instance-14.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.573652054713323
+Augmented Ground Truth Perplexity: -13.766109443846203
+Correct Perplexity: True
+Feasibility: Invalid action: put-down yellow because object yellow is not in hand,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the hand is empty, the blue block is on top of the yellow block, the yellow block is on top of the red block and the red block is on the table.
+My goal is to have that the red block is on top of the blue block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the yellow block
+put down the blue block
+unstack the yellow block from on top of the red block
+put down the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the hand is empty, the red block is on top of the yellow block, the blue block is on top of the red block and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+put down the yellow block
+put down the blue block
+unstack the red block from on top of the yellow block
+put down the red block
+stack the red block on top of the blue block
+stack the yellow block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(put-down yellow)
+(put-down blue)
+(unstack red yellow)
+(put-down red)
+(stack red blue)
+(stack yellow red)
+
+-------- Ground truth plan ---------
+(unstack blue red)
+(put-down blue)
+(unstack red yellow)
+(put-down red)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-13.pddl
+
+ Instance ./instances/generated_basic_easy/instance-14.pddl
+
+ Instance ./instances/generated_basic_easy/instance-15.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -13.67686823436192
+Augmented Ground Truth Perplexity: -13.94910352413471
+Correct Perplexity: False
+Feasibility: Invalid action: unstack blue yellow because object blue is not on top of yellow, object blue is not clear,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 1.00]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the yellow block is clear, the hand is empty, the blue block is on top of the red block, the red block is on the table and the yellow block is on the table.
+My goal is to have that the blue block is on top of the yellow block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the hand is empty, the red block is on top of the yellow block, the blue block is on top of the red block and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+unstack the red block from on top of the yellow block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the red block is on top of the yellow block and the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the blue block from on top of the yellow block
+stack the red block on top of the yellow block
+pick up the blue block
+put down the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack yellow red)
+(put-down yellow)
+(unstack blue yellow)
+(stack red yellow)
+(pick-up blue)
+(put-down blue)
+
+-------- Ground truth plan ---------
+(unstack yellow red)
+(put-down yellow)
+(unstack red blue)
+(stack red yellow)
+(pick-up blue)
+(stack blue red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-14.pddl
+
+ Instance ./instances/generated_basic_easy/instance-15.pddl
+
+ Instance ./instances/generated_basic_easy/instance-16.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.52556059701102
+Augmented Ground Truth Perplexity: -13.649743753321031
+Correct Perplexity: True
+Feasibility: Invalid action: unstack blue yellow because object blue is not on top of yellow, object blue is not clear,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 0.92]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the blue block is clear, the hand is empty, the red block is on top of the yellow block, the blue block is on top of the red block and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the blue block from on top of the red block
+put down the blue block
+unstack the red block from on top of the yellow block
+put down the red block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the red block is on top of the yellow block and the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+stack the red block on top of the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the blue block is on top of the red block, the yellow block is on top of the blue block and the red block is on the table.
+My goal is to have that the red block is on top of the blue block and the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the blue block from on top of the yellow block
+put down the yellow block
+stack the yellow block on top of the red block
+stack the blue block on top of the yellow block
+pick up the red block
+stack the yellow block on top of the blue block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack blue yellow)
+(put-down yellow)
+(stack yellow red)
+(stack blue yellow)
+(pick-up red)
+(stack yellow blue)
+
+-------- Ground truth plan ---------
+(unstack yellow blue)
+(put-down yellow)
+(unstack blue red)
+(stack blue yellow)
+(pick-up red)
+(stack red blue)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-15.pddl
+
+ Instance ./instances/generated_basic_easy/instance-16.pddl
+
+ Instance ./instances/generated_basic_easy/instance-17.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -13.906822778961875
+Augmented Ground Truth Perplexity: -13.973512539496788
+Correct Perplexity: False
+Feasibility: Invalid action: pick-up yellow because hand is not empty,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 0.93]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the red block is on top of the blue block, the yellow block is on top of the red block and the blue block is on the table.
+My goal is to have that the red block is on top of the yellow block and the blue block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the red block
+put down the yellow block
+unstack the red block from on top of the blue block
+stack the red block on top of the yellow block
+pick up the blue block
+stack the blue block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the blue block is on top of the red block, the yellow block is on top of the blue block and the red block is on the table.
+My goal is to have that the red block is on top of the blue block and the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+unstack the blue block from on top of the red block
+stack the blue block on top of the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+pick up the red block
+pick up the yellow block
+put down the blue block
+stack the yellow block on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(pick-up red)
+(pick-up yellow)
+(put-down blue)
+(stack yellow red)
+
+-------- Ground truth plan ---------
+(pick-up red)
+(stack red blue)
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-16.pddl
+
+ Instance ./instances/generated_basic_easy/instance-17.pddl
+
+ Instance ./instances/generated_basic_easy/instance-18.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.043006185384897
+Augmented Ground Truth Perplexity: -14.084763008972693
+Correct Perplexity: False
+Feasibility: Invalid action: pick-up red because object red is not on the table,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 0.87]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the yellow block is clear, the hand is empty, the blue block is on top of the red block, the yellow block is on top of the blue block and the red block is on the table.
+My goal is to have that the red block is on top of the blue block and the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the yellow block from on top of the blue block
+put down the yellow block
+unstack the blue block from on top of the red block
+stack the blue block on top of the yellow block
+pick up the red block
+stack the red block on top of the blue block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+pick up the red block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the red block
+put down the red block
+stack the blue block on top of the yellow block
+[PLAN END]
+--------- Extracted plan ---------
+(pick-up red)
+(put-down red)
+(unstack yellow blue)
+(put-down red)
+(put-down red)
+(stack blue yellow)
+
+-------- Ground truth plan ---------
+(unstack red yellow)
+(put-down red)
+(unstack yellow blue)
+(put-down yellow)
+(pick-up blue)
+(stack blue yellow)
+
+=============================================================================
+
+ Instance ./instances/generated_basic_easy/instance-17.pddl
+
+ Instance ./instances/generated_basic_easy/instance-18.pddl
+
+ Instance ./instances/generated_basic_easy/instance-19.pddl
+===== aug:replace_steps_aug_n:3 =====
+Ground Truth Perplexity: -14.719630700570566
+Augmented Ground Truth Perplexity: -13.647017704115974
+Correct Perplexity: True
+Feasibility: Invalid action: unstack yellow red because object yellow is not on top of red,
+[n_examples=2, correct: 0.00, correct_feasibility: 0.00, correct_perplexity: 0.81]
+===============FAILURE===============
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the blue block is clear, the yellow block is clear, the hand is empty, the red block is on the table, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the red block is on top of the blue block and the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+pick up the red block
+stack the red block on top of the blue block
+pick up the yellow block
+stack the yellow block on top of the red block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the hand is empty, the red block is on top of the yellow block, the yellow block is on top of the blue block and the blue block is on the table.
+My goal is to have that the blue block is on top of the yellow block.
+
+My plan is as follows:
+
+[PLAN]
+unstack the red block from on top of the yellow block
+put down the red block
+unstack the yellow block from on top of the blue block
+put down the yellow block
+pick up the blue block
+stack the blue block on top of the yellow block
+[PLAN END]
+I am playing with a set of blocks where I need to arrange the blocks into stacks. Here are the actions I can do
+
+Pick up a block
+Unstack a block from on top of another block
+Put down a block
+Stack a block on top of another block
+
+I have the following restrictions on my actions:
+I can only pick up or unstack one block at a time.
+I can only pick up or unstack a block if my hand is empty.
+I can only pick up a block if the block is on the table and the block is clear. A block is clear if the block has no other blocks on top of it and if the block is not picked up.
+I can only unstack a block from on top of another block if the block I am unstacking was really on top of the other block.
+I can only unstack a block from on top of another block if the block I am unstacking is clear.
+Once I pick up or unstack a block, I am holding the block.
+I can only put down a block that I am holding.
+I can only stack a block on top of another block if I am holding the block being stacked.
+I can only stack a block on top of another block if the block onto which I am stacking the block is clear.
+Once I put down or stack a block, my hand becomes empty.
+
+[STATEMENT]
+As initial conditions the red block is clear, the yellow block is clear, the hand is empty, the red block is on top of the blue block, the blue block is on the table and the yellow block is on the table.
+My goal is to have that the yellow block is on top of the red block.
+
+My plan is as follows:
+
+[PLAN]
+--------- GPT3 response ---------
+unstack the yellow block from on top of the red block
+unstack the yellow block from on top of the red block
+[PLAN END]
+--------- Extracted plan ---------
+(unstack yellow red)
+(unstack yellow red)
+
+-------- Ground truth plan ---------
+(pick-up yellow)
+(stack yellow red)
+
+=============================================================================
