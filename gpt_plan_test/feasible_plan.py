@@ -1,10 +1,38 @@
 import pdb 
 
-def parse_initial_conditions(initial_conditions_list):
+def get_initial_conditions_and_objects(problem_file, config):
+    parsed_init_conditions = []
+    with open(problem_file, 'r') as file:
+        lines = file.readlines()
+        for i, line in enumerate(lines):
+            if line.startswith('(:objects'):
+                for j in range(i, len(lines)):
+                    if lines[j].startswith('(:goal'):
+                        break
+                    
+                    #split by spaces
+                    chunked_line = lines[j].split(' ')
+                    #iterate over chunks
+                    #if the first element is a letter and the length of the string is at most 2, then it is an object
+                    for k, chunk in enumerate(chunked_line):
+                        if chunk[0].isalpha() and (len(chunk) <= 1 or chunk[1] == ')'):
+                            #replace the chunk with the corresponding object
+                            chunked_line[k] = config['encoded_objects'][chunk[0]].split(' ')[0] + chunk[1:]
+                    #join the chunks back together
+                    lines[j] = ' '.join(chunked_line)
+                    parsed_init_conditions.append(lines[j])
+    
+        parsed_init_conditions = [line.strip() for line in parsed_init_conditions]
+        parsed_init_conditions = [line for line in parsed_init_conditions if line != '']
+
+    """
+    This results in something in the form
+    '(:objects red blue yellow )', '(:init', '(handempty)', '(on red blue)', '(on blue yellow)', '(ontable yellow)', '(clear red)', ')'
+    """
     initial_conditions = []
     objects = set()
 
-    for condition in initial_conditions_list:
+    for condition in parsed_init_conditions:
         if condition.startswith("(:objects"):
             obj_str = condition.replace("(:objects", "").replace(")", "").strip()
             for obj in obj_str.split():
@@ -12,14 +40,14 @@ def parse_initial_conditions(initial_conditions_list):
         elif condition.startswith("(") and condition.endswith(")"):
             initial_conditions.append(condition)
 
-    return initial_conditions, objects
+    return initial_conditions, objects    
 
-
-def evaluate_plan(initial_conditions_list, plan):
-    initial_conditions, objects = parse_initial_conditions(initial_conditions_list)
+def evaluate_plan(plan, problem_file, config):
+    initial_conditions, objects = get_initial_conditions_and_objects(problem_file, config)
     state = set(initial_conditions)
 
     for action in plan:
+        action = action.replace("(", "").replace(")", "")
         action_parts = action.split()
         action_name = action_parts[0]
         action_obj1 = action_parts[1]
@@ -95,6 +123,9 @@ def evaluate_plan(initial_conditions_list, plan):
             state.remove(f"(clear {action_obj2})")
             state.add(f"(on {action_obj1} {action_obj2})")
             state.add(f"(clear {action_obj1})")
+
+        else:
+            raise Exception(f"Action {action_name} is not supported")
 
     return True, "All actions are valid."
 

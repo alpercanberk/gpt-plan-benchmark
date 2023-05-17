@@ -18,8 +18,6 @@ def add_random_action(plan, n=1, len_plan=10):
     """
     gets a random action and then adds it to a random index in the plan
     """
-    if len(plan) >= len_plan:
-        raise ValueError("Plan is too long")
     
     for i in range(n):
         random_action = get_random_action(plan)
@@ -28,7 +26,7 @@ def add_random_action(plan, n=1, len_plan=10):
 
     return plan
 
-def get_random_action(plan=None, objects=None, possible_actions = ['unstack', 'put-down', 'pick-up', 'stack', 'noop']):
+def get_random_action(plan=None, objects=None, possible_actions = ['unstack', 'put-down', 'pick-up', 'stack']):
 
     if objects is None:
         assert plan is not None
@@ -43,7 +41,7 @@ def get_random_action(plan=None, objects=None, possible_actions = ['unstack', 'p
             if len(words) > 2:
                 objects.append(words[2])
 
-    objects = list(set(objects))
+    objects = ['a', 'b', 'c']
 
     random_action = random.choice(possible_actions)
     #sample 2 random objects
@@ -59,9 +57,6 @@ def get_random_action(plan=None, objects=None, possible_actions = ['unstack', 'p
         new_action = '(' + random_action + ' ' + random_objects[0] + ' ' + random_objects[1] + ')'
     else:
         new_action = '(' + random_action + ' ' + random_objects[0] + ')'
-
-    if random_action == 'noop':
-        new_action = '(noop)'
 
     return new_action
 

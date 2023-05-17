@@ -11,15 +11,15 @@ def text_plan_to_natural_language(plan, data):
             obj2 = obj2 + ' block'
             obj1 = obj1 + ' block'
             action_template = data['actions'][action]
-            out.append(f"{idx + 1} " + action_template.format(obj1, obj2))
+            out.append(action_template.format(obj1, obj2))
         elif len(objs) == 1:
             obj1 = objs[0]
             obj1 = obj1 + ' block'
             action_template = data['actions'][action]
-            out.append(f"{idx + 1} " + action_template.format(obj1))
+            out.append(action_template.format(obj1))
         else:
             action_template = data['actions'][action]
-            out.append(f"{idx + 1} " + action_template)
+            out.append(action_template)
 
     #join the elements of out using '\n'
     out =  '\n'.join(out)

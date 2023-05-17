@@ -142,17 +142,9 @@ def extract_plan_perplexity(sequence_log_probs, sequence_tokens, plan_start_str=
     for i in range(len(sequence_tokens), 0, -1):
         if plan_start_str in "".join(sequence_tokens[i:]):
             break
-        
-    # print("here")
-    # plan_tokens = sequence_tokens[i:]
-    plan_sequence_log_probs = sequence_log_probs[i:]
 
-    # print(plan_tokens, plan_sequence_log_probs)
-    def f(seq_len):
-        return seq_len
-        # return np.sqrt(x)
-    
-    return sum(plan_sequence_log_probs) / (f(len(plan_sequence_log_probs)))
+    plan_sequence_log_probs = sequence_log_probs[i:]
+    return -np.mean(plan_sequence_log_probs)
 
 def plan_list_to_natural_language(plan_list, data, len_plan=10):
     plan_str = "\n".join(plan_list) + "\n"
@@ -180,10 +172,6 @@ def gibbs_query(query, engine, max_tok, model=None, stop="[STATEMENT]",
 
     plan_length = len(initial_plan_list_with_objects)
 
-    len_plan = 10
-    if plan_length < len_plan:
-        initial_plan_list_with_objects += ["(noop)"] * (len_plan - plan_length)
-    
     # plan_list_perplexity = lambda plan_list: perplexity_query(query + plan_list_to_natural_language(plan_list, data), engine, max_tok, model, stop, prev_pos=plan_start_idx)
     def plan_list_perplexity(plan_list):
         nlplan = plan_list_to_natural_language(plan_list, data)
@@ -254,7 +242,7 @@ def gibbs_query(query, engine, max_tok, model=None, stop="[STATEMENT]",
     
 
 
-def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]", prev_pos=0):
+def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]", prob_prev_pos=0):
     assert engine == 'llama'
     LLAMA_PORT = 54983
     #query for response with exponential backoff
@@ -269,14 +257,14 @@ def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]", 
     #     print("="*20)
 
     try:
-        response = requests.post(f'http://127.0.0.1:{LLAMA_PORT}/flask-inference', json={'prompt': query, 'prob_mode':True, 'prob_prev_pos':prev_pos})
+        response = requests.post(f'http://127.0.0.1:{LLAMA_PORT}/flask-inference', json={'prompt': query, 'prob_mode':True, 'prob_prev_pos':prob_prev_pos})
         response = response.json()
-        return extract_plan_perplexity(response['info']['log_perplexity'], response['info']['tokens'])
+        return extract_plan_perplexity(response['info']['chosen_log_probs'], response['info']['chosen_decode_tokens']), response['info']
     except Exception as e:
         print("LLAMA ERROR, RETRYING IN 0.5s", e)
         time.sleep(backoff)
         backoff *= 2
-        return perplexity_query(query, engine, max_tokens, model, stop, prev_pos)
+        return perplexity_query(query, engine, max_tokens, model, stop, prob_prev_pos)
 
 def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
     max_token_err_flag = False
@@ -438,15 +426,11 @@ def instance_to_text_blocksworld(problem, get_plan, data, shuffle=False, len_pla
             #remove random action
             plan = plan[:random_plan_idx] + plan[random_plan_idx+1:]
         
-        plan_length = len(plan)
-        if plan_length < len_plan:
-            plan = plan + ["(noop)"] * (len_plan - plan_length)
-
         for idx, action in enumerate(plan):
             action = action.strip("(").strip(")")
             act_name, objs = action.split(" ")[0], action.split(" ")[1:]
             objs = [OBJS[obj] for obj in objs]
-            PLAN += f"{idx+1} " + data['actions'][act_name].format(*objs) + "\n"
+            PLAN += data['actions'][act_name].format(*objs) + "\n"
         
         if not negative_example:
             PLAN += "[PLAN END]\n"
@@ -467,11 +451,6 @@ def get_plan_as_text(data, given_plan=None, len_plan=8):
             objs = [OBJS[obj].replace(" block", "") for obj in objs]
             PLAN += "(" + act_name + " " + " ".join(objs) + ")\n"
             # PLAN += data['actions'][act_name].format(*objs) + "\n"
-        plan_length = len([x for x in PLAN.split("\n") if x != ""])
-
-        if plan_length < len_plan:
-            PLAN += f"(noop)\n" * (len_plan - plan_length)
-        
         return PLAN
 
     plan_file = "sas_plan"
@@ -485,11 +464,6 @@ def get_plan_as_text(data, given_plan=None, len_plan=8):
         objs = [OBJS[obj].replace(" block", "") for obj in objs]
         PLAN += "(" + act_name + " " + " ".join(objs) + ")\n"
         # PLAN += data['actions'][act_name].format(*objs) + "\n"
-
-    plan_length = len([x for x in PLAN.split("\n") if x != ""])
-
-    if plan_length < len_plan:
-        PLAN += f"(noop)\n" * (len_plan - plan_length)
     
     return PLAN
 
