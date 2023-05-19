@@ -144,6 +144,7 @@ def extract_plan_perplexity(sequence_log_probs, sequence_tokens, plan_start_str=
             break
 
     plan_sequence_log_probs = sequence_log_probs[i:]
+    print("length of plan sequence log probs", len(plan_sequence_log_probs))
     return -np.mean(plan_sequence_log_probs)
 
 def plan_list_to_natural_language(plan_list, data, len_plan=10):
@@ -266,7 +267,7 @@ def perplexity_query(query, engine, max_tokens, model=None, stop="[STATEMENT]", 
         backoff *= 2
         return perplexity_query(query, engine, max_tokens, model, stop, prob_prev_pos)
 
-def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
+def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]", prob_prev_pos=0):
     max_token_err_flag = False
     if engine=='bloom':
 
@@ -289,7 +290,7 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
         #query for response with exponential backoff
         backoff = 0.5
         try:
-            response = requests.post(f'http://127.0.0.1:{LLAMA_PORT}/flask-inference', json={'prompt': query})
+            response = requests.post(f'http://127.0.0.1:{LLAMA_PORT}/flask-inference', json={'prompt': query, 'prob_mode':False, 'prob_prev_pos':prob_prev_pos})
             if response.status_code != 200:
                 raise Exception('bad response code')
         except Exception as e:
@@ -298,7 +299,7 @@ def send_query(query, engine, max_tokens, model=None, stop="[STATEMENT]"):
             backoff *= 2
 
         full_response_text = response.json()['result']
-        tokens = response.json()['info']['tokens']
+        tokens = response.json()['info']['chosen_decode_tokens']
         completion_text = full_response_text[len(query):]
         return completion_text, tokens
 

@@ -15,10 +15,13 @@ from plan_utils.plan_augmentations import add_random_action, repeat_random_step,
 from plan_utils.utils import init_conditions_list_from_file
 import pandas as pd
 import pickle
+from typing import List
+import time
+import numpy as np
  
 np.random.seed(42)
 
-INTERLEAVE_INSTRUCTIONS = False
+INTERLEAVE_INSTRUCTIONS = True
 N_EXAMPLES = 2
 NEGATIVE_EXAMPLE = False
 
@@ -53,6 +56,12 @@ def augment_plan(text_plan, n, augmentation, augmentations, first_iteration=True
     #join text plan by \n
     text_plan = '\n'.join(text_plan)
     return text_plan
+
+
+def extract_plan_begin_idx(sequence_tokens : List[str], plan_start_str : str = "[PLAN]") -> int:
+    for i in range(len(sequence_tokens), 0, -1):
+        if plan_start_str in "".join(sequence_tokens[i:]):
+            return i
 
 class ReasoningTasks():
     """
@@ -147,18 +156,34 @@ class ReasoningTasks():
         gt_infos = []
         aug_infos = []
 
-        EXAMPLE_CUTOFF = 20
+        ### CREATE THE PROMPT ###
         EXAMPLES_SEED = 42
         #crate numpy state with seed
         g = np.random.RandomState(EXAMPLES_SEED)
-        example_tasks_idx = g.choice(np.arange(self.config['start'], EXAMPLE_CUTOFF), 
+        example_tasks_idx = g.choice(np.arange(self.config['start'], self.config['end']), 
                                                         size=self.n_examples, 
                                                         replace=False)  
-        real_tasks_idx = range(EXAMPLE_CUTOFF, i_end)
+        real_tasks_idx = np.setdiff1d(np.arange(self.config['start'], self.config['end']), example_tasks_idx)
+        prompt = ""
+        for i, example_task_idx in enumerate(example_tasks_idx):
+            cur_instance = instance.format(example_task_idx)
+            # --------------- Add to final output --------------- #
+            print(f"Loading example instance {cur_instance}...")
+            # --------------- Read Instance --------------- #
+            problem = self.get_problem(cur_instance, domain_pddl)
+            # ------------ Put plan and instance into text ------------ #
+            gt_plan = self.compute_plan(domain_pddl, cur_instance)
+            gt_plan_text = get_plan_as_text(self.config, len_plan=1)
+            if i == 0 or INTERLEAVE_INSTRUCTIONS:
+                prompt += self.config["domain_intro"] 
+            # negative_example = False 
+            # if ((i-start) % 2 == 1) and NEGATIVE_EXAMPLE:
+            #     negative_example = True
+            prompt += fill_template(*instance_to_text_blocksworld(problem, get_plan=True, data=self.config))
+            prompt += "\n"
 
-
+        ### STARTING THE MAIN LOOP ###
         prob_prev_pos = 0 #for caching the examples
-
         pbar = tqdm.tqdm(real_tasks_idx)
         for loop_idx, cur_task_idx in enumerate(pbar):
             output = ""
@@ -171,48 +196,39 @@ class ReasoningTasks():
                                     f"correct_perplexity(%): {correct_perplexity_percent:.2f}")
 
             query = ""
-           
-            all_tasks_idx = list(example_tasks_idx) + [cur_task_idx]
-            for i, task_idx in enumerate(all_tasks_idx):
+            query += prompt
 
-                last_plan = True if i == len(all_tasks_idx) - 1 else False
+            last_plan = True
 
-                cur_instance = instance.format(task_idx)
-                # --------------- Add to final output --------------- #
-                output += f"Loading {'task' if last_plan else 'example'} instance {cur_instance}... \n"
-                # --------------- Read Instance --------------- #
-                problem = self.get_problem(cur_instance, domain_pddl)
-                # ------------ Put plan and instance into text ------------ #
-                gt_plan = self.compute_plan(domain_pddl, cur_instance)
-                gt_plan_text = get_plan_as_text(self.config, len_plan=1)
+            ######
+            cur_instance = instance.format(cur_task_idx)
+            # --------------- Add to final output --------------- #
+            output += f"Loading task instance {cur_instance}... \n"
+            # --------------- Read Instance --------------- #
+            problem = self.get_problem(cur_instance, domain_pddl)
+            # ------------ Put plan and instance into text ------------ #
+            gt_plan = self.compute_plan(domain_pddl, cur_instance)
+            gt_plan_text = get_plan_as_text(self.config, len_plan=1)
 
-
-                if i == 0 or INTERLEAVE_INSTRUCTIONS:
-                    query += self.config["domain_intro"] 
-
-                # negative_example = False 
-                # if ((i-start) % 2 == 1) and NEGATIVE_EXAMPLE:
-                #     negative_example = True
-                query += fill_template(*instance_to_text_blocksworld(problem, not last_plan, self.config))
-                if not last_plan:
-                    query += "\n"
+            if INTERLEAVE_INSTRUCTIONS:
+                query += self.config["domain_intro"] 
+            query += fill_template(*instance_to_text_blocksworld(problem, get_plan=False, data=self.config))
+            if not last_plan:
+                query += "\n"
+            #####
             
             # Querying LLM
-            gpt3_response = send_query(query, 
+            gpt3_response, response_tokens = send_query(query, 
                                         self.engine, 
                                         self.max_gpt_response_length,
                                          model=self.model, 
-                                        #  initial_conditions=parsed_init_conditions,
-                                        #  actions = problem.actions, 
-                                        #  plan_file = self.gpt3_plan_file,
-                                        #  data=self.config,
-                                        #  ground_truth_plan=gt_plan_text,
-                                         )[0]   
+                                    )   
+            if prob_prev_pos == 0:
+                prob_prev_pos = extract_plan_begin_idx(response_tokens, plan_start_str = '[PLAN]') - 5
+
             gt_response = text_plan_to_natural_language(gt_plan_text, self.config)
 
             # pdb.set_trace()
-
-
             def response_to_list(response):
                 response_list = response.split('\n')
                 response_list = [x for x in response_list if x != '' and x != '[PLAN END]']
@@ -230,17 +246,22 @@ class ReasoningTasks():
             gpt3_perplexity_query = query + gpt3_response
             gt_perplexity_query = query + gt_response
 
+            #time it
+            start = time.time()
+
             gpt3_response_perplexity, gpt3_info = perplexity_query(gpt3_perplexity_query, 
                                                                     self.engine,
                                                                     self.max_gpt_response_length, 
                                                                     model=self.model, 
-                                                                    prob_prev_pos=0)
+                                                                    prob_prev_pos=prob_prev_pos)
             gt_response_perplexity, gt_info = perplexity_query(gt_perplexity_query, 
                                                                 self.engine, 
                                                                 self.max_gpt_response_length, 
                                                                 model=self.model, 
-                                                                prob_prev_pos=0)
+                                                                prob_prev_pos=prob_prev_pos)
 
+            end = time.time()
+            print(f"Perplexity query took {end - start} seconds")
             # pdb.set_trace()
 
             # aug_info = {}
